@@ -7,8 +7,8 @@ class Chatbar extends Component {
 render() {
    return(
     <div>
-     <input className="chatbar-username" placeholder="Your Name (Optional)" />
-     <input className="chatbar-message" placeholder="Type a message and hit ENTER" />
+     <input name="newMessage" className="chatbar-username" placeholder="Your Name (Optional)" />
+     <input name="newUser" className="chatbar-message" placeholder="Type a message and hit ENTER" />
     </div>  
       )
     }   
