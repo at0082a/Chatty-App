@@ -7,11 +7,11 @@ class Chatbar extends Component {
 render() {
    return(
     <div>
-     <input name="newMessage" className="chatbar-username" placeholder="Your Name (Optional)" />
-     <input name="newUser" className="chatbar-message" placeholder="Type a message and hit ENTER" />
+     <input className="chatbar-username" placeholder="Your Name (Optional)" />
+     <input onKeyDown={this.props.handleMessage} className="chatbar-message" placeholder="Type a message and hit ENTER"/>
     </div>  
-      )
-    }   
+      )   
    }
+}
 
 export default Chatbar

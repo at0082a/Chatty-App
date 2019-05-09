@@ -34,9 +34,4 @@ return (
    
  }   
 }
-
-// {this.props.message.username}
-// {this.props.message.content}
-// {this.props.message.type}
-
 export default Message;
