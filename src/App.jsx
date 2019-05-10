@@ -15,7 +15,8 @@ class App extends Component {
     currentUser: {name: 'Anonymous'},
     socket: null,
     messages : [],
-    userCount : null
+    userCount : null,
+    userJoining : null
   };
   this.socket = socket 
   this.addMessage = this.addMessage.bind(this); 
@@ -42,15 +43,20 @@ componentDidMount() {
       const userCount = receivedMessage;
       console.log(userCount);
       this.setState({userCount})
-    }
+    } 
+  if (receivedMessage.type === "incomingNotification") {
+    const userJoining = receivedMessage.content;
+    this.setState({ userJoining });
   }
 }
- 
+}
 //passed down as a prop to chatbar in Chatbar.jsx
 handleMessage(evt) {
   if (evt.key === 'Enter') {
       const messageInput = evt.target.value; //grabs value from input field for message
-      // const userInput = 'Bob';
+      if (!messageInput) {
+        return
+      }
       //use this to bring addMessage into the function
       this.addMessage(messageInput, 'postMessage');
     } 
@@ -59,7 +65,10 @@ handleMessage(evt) {
 //userentered function grabs the text from the username input box. userEntered is passed to 
 //chatbar.jsx, and the currentuser state is updated for the new user.
 handleUser (event) {
-  const newUser = event.target.value;
+  let newUser = event.target.value;
+  if (!newUser) {
+    newUser = 'Anonymous'
+  }
   if (event.key === 'Enter') {
     if (newUser !== this.state.currentUser.name) {
       this.setState({currentUser : {name : newUser}})
@@ -85,7 +94,7 @@ render() {
     <div>
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
-        <div>Usercount : {this.state.userCount}</div>
+        <div className="user-count"> Users Online : {this.state.userCount} </div>
       </nav>
         {messages} 
       <footer className="chatbar">

@@ -15,21 +15,31 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
-//numberOfUsers captures the amount of users on site
-const numberOfUsers = wss.clients.size;
 // Create a broadcast function to send the amount of users to the server
   wss.broadcast = function broadcast(msg) {
     wss.clients.forEach(function each(client) { 
       const userCount = JSON.stringify(msg)
       client.send(userCount);
   });
- }
+}
+  
+  //creates notification for user that has joined the chat
+  const newClientNotification = {
+    id: uuidv4(),
+    type: "incomingNotification",
+    content: "Anonymous user has joined the chat.",
+    username: "---New User---"
+  };
+
+
 //console will log below when connected to other server
 wss.on("connection", ws => {
   console.log("Client connected");
   
  //sends the number of users to the client.
-  wss.broadcast(numberOfUsers);
+  wss.broadcast(wss.clients.size);
+  //sends a notification for 
+  wss.broadcast(newClientNotification);
 
   ws.on("message", data => {
     const message = JSON.parse(data);
