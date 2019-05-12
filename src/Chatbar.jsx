@@ -6,14 +6,10 @@ import React, {Component} from 'react';
 class Chatbar extends Component {
 render() {
    return(
-    <div>
-     <div>
-       <input onKeyDown={this.props.handleUser} className="chatbar-username" placeholder="Your Name (Optional)" />
-     </div>
-     <div>
-     <input onKeyDown={this.props.handleMessage} className="chatbar-message" placeholder="Type a message and hit ENTER"/>
-     </div>
-    </div>  
+   <footer className="chatbar">
+      <input onKeyDown={this.props.handleUser} className="chatbar-username" placeholder="Your Name (Optional)"/>
+      <input onKeyDown={this.props.handleMessage} className="chatbar-message" placeholder="Type a message and hit ENTER"/> 
+   </footer>
       )   
    }
 }

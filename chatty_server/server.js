@@ -31,11 +31,18 @@ const wss = new SocketServer({ server });
     username: "---New User---"
   };
 
+  const userLeavesChat = {
+    id: uuidv4(),
+    content: "has left the chat."
+  }
+
 
 //console will log below when connected to other server
 wss.on("connection", ws => {
   console.log("Client connected");
   
+
+
  //sends the number of users to the client.
   wss.broadcast(wss.clients.size);
   //sends a notification for 
@@ -53,7 +60,9 @@ wss.on("connection", ws => {
     }
   });
 });     
-ws.on('close', () => console.log('Client disconnected'));
+ws.on('close', () => wss.broadcast(wss.clients.size--),
+console.log("client is disconnected"),
+wss.broadcast(userLeavesChat))
 });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.

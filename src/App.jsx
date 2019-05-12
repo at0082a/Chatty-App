@@ -16,12 +16,14 @@ class App extends Component {
     socket: null,
     messages : [],
     userCount : null,
-    userJoining : null
+    userJoining : null,
+    userLeaves: null
   };
   this.socket = socket 
   this.addMessage = this.addMessage.bind(this); 
   this.handleMessage = this.handleMessage.bind(this);
   this.handleUser = this.handleUser.bind(this);
+  this.onUnload = this.onUnload.bind(this);
 }
 
 //set socket in componentdidmount() to the port in chatty_app server and 
@@ -37,11 +39,10 @@ componentDidMount() {
   this.socket.onmessage = event => {
     const receivedMessage = JSON.parse(event.data)
     const newMessageList = this.state.messages.concat(receivedMessage)
-   
     this.setState({messages: newMessageList})
+
     if(Number.isInteger(receivedMessage)) {
       const userCount = receivedMessage;
-      console.log(userCount);
       this.setState({userCount})
     } 
   if (receivedMessage.type === "incomingNotification") {
@@ -49,6 +50,11 @@ componentDidMount() {
     this.setState({ userJoining });
   }
 }
+}
+
+onUnload(event) { // the method that will be used for both add and remove event
+  console.log("hellooww")
+  event.returnValue = "Hellooww"
 }
 //passed down as a prop to chatbar in Chatbar.jsx
 handleMessage(evt) {
@@ -90,18 +96,29 @@ addMessage(message, type) {
 render() {
     {/* message list gets passed back to messagelist.jsx below thru const messages*/}
   const messages = <MessageList messages={this.state.messages}/>
+  if (this.state.userCount === 1) {
     return (
+      <div>
+        <nav className="navbar">
+          <a href="/" className="navbar-brand">Chatty</a>
+          <div className="user-count"> {this.state.userCount} User Online </div>
+        </nav>
+          {messages} 
+          <Chatbar handleMessage={this.handleMessage} handleUser={this.handleUser} />
+          {/* pass in handleMessage function into chatbar here to pass down to children */}
+      </div>
+      );
+  }
+
+  return (
     <div>
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
-        <div className="user-count"> Users Online : {this.state.userCount} </div>
+        <div className="user-count"> {this.state.userCount} Users Online  </div>
       </nav>
         {messages} 
-      <footer className="chatbar">
-        <Chatbar handleMessage={this.handleMessage} handleUser={this.handleUser}
-        />
+        <Chatbar handleMessage={this.handleMessage} handleUser={this.handleUser} />
         {/* pass in handleMessage function into chatbar here to pass down to children */}
-      </footer>
     </div>
     );
   }
