@@ -39,4 +39,4 @@ npm run lint
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 
 ### Screenshot 
-! [Screenshot of ChattyApp] ()
+! [Screenshot of ChattyApp] (https://github.com/at0082a/Chatty-App/blob/master/pictures/Screen%20Shot%202019-05-14%20at%2012.42.20%20PM.png)
