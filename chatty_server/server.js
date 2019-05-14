@@ -31,17 +31,14 @@ const wss = new SocketServer({ server });
     username: "---New User---"
   };
 
-  const userLeavesChat = {
-    id: uuidv4(),
-    content: "has left the chat."
-  }
-
+  // const clientHasLeft = {
+  //   id: uuidv4(),
+  //   content: "has left the chat."
+  // }
 
 //console will log below when connected to other server
 wss.on("connection", ws => {
   console.log("Client connected");
-  
-
 
  //sends the number of users to the client.
   wss.broadcast(wss.clients.size);
@@ -52,18 +49,18 @@ wss.on("connection", ws => {
     const message = JSON.parse(data);
     message.id = uuidv4();
 
-  //sends the message data to the client
-  wss.clients.forEach(function each(client) {
-    const newData = JSON.stringify(message)
-    if (client.readyState === ws.OPEN) {
-      client.send(newData);
-    }
+    //sends the message data to the client
+    wss.clients.forEach(function each(client) {
+      const newData = JSON.stringify(message)
+      if (client.readyState === ws.OPEN) {
+        client.send(newData);
+      }
+    });
+  });    
+  ws.on('close', () => {
+    wss.broadcast(wss.clients.size--);
+    // console.log("client is disconnected")  
   });
-});     
-ws.on('close', () => wss.broadcast(wss.clients.size--),
-console.log("client is disconnected"),
-wss.broadcast(userLeavesChat))
-});
-
+})
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
  

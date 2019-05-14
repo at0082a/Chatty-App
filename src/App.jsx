@@ -23,7 +23,7 @@ class App extends Component {
   this.addMessage = this.addMessage.bind(this); 
   this.handleMessage = this.handleMessage.bind(this);
   this.handleUser = this.handleUser.bind(this);
-  this.onUnload = this.onUnload.bind(this);
+  this.setupBeforeUnloadListener = this.setupBeforeUnloadListener.bind(this)
 }
 
 //set socket in componentdidmount() to the port in chatty_app server and 
@@ -33,13 +33,23 @@ componentDidMount() {
     this.socket.onopen = function() {
     console.warn('connected to socket')
   } 
-  // this.setState({socket: socket})
-  
-  
+
+  this.socket.onclose = event => {
+    // const userHasLeft = JSON.parse(event.data)
+    // console.log(userHasLeft)
+    // const notification = userHasLeft.message
+    // const note = `${this.state.Currentuser.name} ${notification}`
+    // this.setState({userLeaves: note})
+  }
+
+  this.setupBeforeUnloadListener();
+
   this.socket.onmessage = event => {
     const receivedMessage = JSON.parse(event.data)
     const newMessageList = this.state.messages.concat(receivedMessage)
     this.setState({messages: newMessageList})
+
+    
 
     if(Number.isInteger(receivedMessage)) {
       const userCount = receivedMessage;
@@ -49,13 +59,17 @@ componentDidMount() {
     const userJoining = receivedMessage.content;
     this.setState({ userJoining });
   }
-}
+
+ }
 }
 
-onUnload(event) { // the method that will be used for both add and remove event
-  console.log("hellooww")
-  event.returnValue = "Hellooww"
+setupBeforeUnloadListener () {
+  window.addEventListener("beforeunload", (ev) => {
+      ev.preventDefault();
+      this.addMessage(`${this.state.currentUser.name} has left the chat`, 'postNotification');
+  });
 }
+
 //passed down as a prop to chatbar in Chatbar.jsx
 handleMessage(evt) {
   if (evt.key === 'Enter') {
@@ -95,7 +109,7 @@ addMessage(message, type) {
 
 render() {
     {/* message list gets passed back to messagelist.jsx below thru const messages*/}
-  const messages = <MessageList messages={this.state.messages}/>
+  const messages = <MessageList messages={this.state.messages} />
   if (this.state.userCount === 1) {
     return (
       <div>
@@ -116,7 +130,7 @@ render() {
         <a href="/" className="navbar-brand">Chatty</a>
         <div className="user-count"> {this.state.userCount} Users Online  </div>
       </nav>
-        {messages} 
+        {messages}
         <Chatbar handleMessage={this.handleMessage} handleUser={this.handleUser} />
         {/* pass in handleMessage function into chatbar here to pass down to children */}
     </div>
