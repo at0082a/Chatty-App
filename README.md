@@ -1,7 +1,13 @@
 ChattyApp 
 =====================
 
-ChattyApp is a client-side single-page application that allows multiple users to chat with each other. Users are able to set their username and chat in real-time through through the Websocket server.
+ChattyApp is a client-side single-page application that allows multiple users to chat with each other. Users are able to set their username and chat in real-time through through the Websocket server. Users are able to:
+  
+  -post messages.
+  -see when another user joins and leaves the application.
+  -see when another user changes their username.
+  -view their messages and those posted by other users.
+  -view the total number of users on the app.
 
 ### Getting Started
 
