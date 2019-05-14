@@ -41,28 +41,35 @@ flex: 2;
 
 .message {
 display: flex;
-padding: 5px;
-}
-
-.message.system {
-  font-style: italic;
-  padding: 5px 20px;
+margin-top: 0;
+padding-top: 1.5rem;
+padding-left: 1rem;
 }
 
 .message-content,
 .message-username {
   overflow: hidden;
-  margin-left:2rem;
-  padding: 0 10px 10px 10px;
+  margin-top: -1rem;
+  padding: 1rem;
 }
 
 .message-content {
-  flex: 14.5;
+  flex: 13;
+  margin-top: -1 rem;
+  padding: 1rem;
+  margin-right: 2rem; 
 }
 
 .message-username {
   flex: 2;
   font-weight: 700;
+  
+}
+
+.message-username-one {
+  flex: 2;
+  font-weight: 700;
+  // padding-right: 7.5rem;
 }
 
 .navbar {
@@ -90,9 +97,16 @@ padding: 5px;
 
 .notification {
   color: tomato;
-  overflow: hidden;
-  margin: 5px;
-  padding: 0 10px 10px;
+  flex: 13;
+  padding-top: 1rem;
+  padding-left: 2rem;
+  margin-top: 1rem; 
+}
+
+.notification-content {
+  flex: 9;
+  padding: 1rem;
+  margin-right: 2rem;
 }
 
 .user-count {

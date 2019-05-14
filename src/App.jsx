@@ -43,21 +43,26 @@ componentDidMount() {
   }
 
   this.setupBeforeUnloadListener();
-
+  
   this.socket.onmessage = event => {
     const receivedMessage = JSON.parse(event.data)
+
+   if (Number.isInteger(receivedMessage)) {
+    const userCount = receivedMessage;
+    this.setState({userCount})
+    } 
+   else if (receivedMessage.type === "incomingNotification") {
+    console.log(receivedMessage)
+    const userJoining = receivedMessage.content;
+    this.setState({ userJoining });
     const newMessageList = this.state.messages.concat(receivedMessage)
     this.setState({messages: newMessageList})
 
-    
+  } else {
+    // const receivedMessage = JSON.parse(event.data)
+    const newMessageList = this.state.messages.concat(receivedMessage)
+    this.setState({messages: newMessageList})
 
-    if(Number.isInteger(receivedMessage)) {
-      const userCount = receivedMessage;
-      this.setState({userCount})
-    } 
-  if (receivedMessage.type === "incomingNotification") {
-    const userJoining = receivedMessage.content;
-    this.setState({ userJoining });
   }
 
  }
@@ -121,7 +126,7 @@ render() {
           <Chatbar handleMessage={this.handleMessage} handleUser={this.handleUser} />
           {/* pass in handleMessage function into chatbar here to pass down to children */}
       </div>
-      );
+      )
   }
 
   return (
@@ -134,7 +139,7 @@ render() {
         <Chatbar handleMessage={this.handleMessage} handleUser={this.handleUser} />
         {/* pass in handleMessage function into chatbar here to pass down to children */}
     </div>
-    );
+    )
   }
 }
 export default App;
