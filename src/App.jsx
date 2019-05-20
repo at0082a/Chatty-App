@@ -26,21 +26,11 @@ class App extends Component {
   this.setupBeforeUnloadListener = this.setupBeforeUnloadListener.bind(this)
 }
 
-//set socket in componentdidmount() to the port in chatty_app server and 
-//append message from socket to message list after JSON.parse.
 componentDidMount() {
   
     this.socket.onopen = function() {
     console.warn('connected to socket')
   } 
-
-  this.socket.onclose = event => {
-    // const userHasLeft = JSON.parse(event.data)
-    // console.log(userHasLeft)
-    // const notification = userHasLeft.message
-    // const note = `${this.state.Currentuser.name} ${notification}`
-    // this.setState({userLeaves: note})
-  }
 
   this.setupBeforeUnloadListener();
   
@@ -50,8 +40,8 @@ componentDidMount() {
    if (Number.isInteger(receivedMessage)) {
     const userCount = receivedMessage;
     this.setState({userCount})
-    } 
-   else if (receivedMessage.type === "incomingNotification") {
+  
+  } else if (receivedMessage.type === "incomingNotification") {
     console.log(receivedMessage)
     const userJoining = receivedMessage.content;
     this.setState({ userJoining });
@@ -62,7 +52,6 @@ componentDidMount() {
     // const receivedMessage = JSON.parse(event.data)
     const newMessageList = this.state.messages.concat(receivedMessage)
     this.setState({messages: newMessageList})
-
   }
 
  }
@@ -78,12 +67,13 @@ setupBeforeUnloadListener () {
 //passed down as a prop to chatbar in Chatbar.jsx
 handleMessage(evt) {
   if (evt.key === 'Enter') {
-      const messageInput = evt.target.value; //grabs value from input field for message
+      let messageInput = evt.target.value; //grabs value from input field for message
       if (!messageInput) {
         return
       }
       //use this to bring addMessage into the function
       this.addMessage(messageInput, 'postMessage');
+      evt.target.value =  ''
     } 
   }
 
@@ -100,6 +90,7 @@ handleUser (event) {
       this.addMessage(
         `${this.state.currentUser.name} changed their username to: ${newUser}`,
         'postNotification')
+      event.target.value = ''
     }
   }
 }
@@ -124,7 +115,6 @@ render() {
         </nav>
           {messages} 
           <Chatbar handleMessage={this.handleMessage} handleUser={this.handleUser} />
-          {/* pass in handleMessage function into chatbar here to pass down to children */}
       </div>
       )
   }
@@ -137,7 +127,6 @@ render() {
       </nav>
         {messages}
         <Chatbar handleMessage={this.handleMessage} handleUser={this.handleUser} />
-        {/* pass in handleMessage function into chatbar here to pass down to children */}
     </div>
     )
   }
